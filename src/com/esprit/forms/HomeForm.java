@@ -63,7 +63,7 @@ public class HomeForm  extends Form{
      Products.setPreferredSize(new Dimension(500,130));
      Style pro = Products.getAllStyles();
      
-     Products.addActionListener(e-> new ProductsForm(home,theme).show());
+     Products.addActionListener(e-> new ProductsForm(theme).show());
      
      
      
@@ -73,7 +73,7 @@ public class HomeForm  extends Form{
      Button addproduct = new Button(s1.toUpperCase());
      addproduct.setPreferredSize(new Dimension(500,130));
      Container contaddpro = BorderLayout.centerAbsolute(addproduct);
-     addproduct.addActionListener(e-> new AddProduct(home,theme).show());
+     addproduct.addActionListener(e-> new AddProduct(theme).show());
      
      
      String s2 = "panier";
@@ -81,13 +81,26 @@ public class HomeForm  extends Form{
      Panier.setPreferredSize(new Dimension(500,130));
      Container contpanier = BorderLayout.centerAbsolute(Panier);
      
-     Panier.addActionListener(e-> new PanierForm(home,theme).show());
+     Panier.addActionListener(e-> new PanierForm(theme).show());
+     
+     
+     String s3 = "order";
+     Button order = new Button (s3.toUpperCase());
+     order.setPreferredSize(new Dimension(500,130));
+     Container contorder = BorderLayout.centerAbsolute(order);
+     
+     int total = 500;
+     order.addActionListener(e-> new OrderForm(theme,total).show());
+     
+     
+     
   
         home.add(ch);
         home.add(centered);
         home.add(containerproducts);
         home.add(contaddpro);
         home.add(contpanier);
+        home.add(contorder);
         home.show();
     }
   

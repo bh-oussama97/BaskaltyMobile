@@ -18,14 +18,14 @@ public class Product {
     private String name;
     private String reference;
     private String description;
-    private float price;
+    private int price;
     private String image;
     private int id_user;
 
     public Product() {
     }
 
-    public Product(int id, int quantity, String name, String reference, String description, float price, String image) {
+    public Product(int id, int quantity, String name, String reference, String description, int price, String image) {
         this.id = id;
         this.quantity = quantity;
         this.name = name;
@@ -35,7 +35,7 @@ public class Product {
         this.image = image;
     }
 
-    public Product(int quantity, String name, String reference, String description, float price, String image) {
+    public Product(int quantity, String name, String reference, String description, int price, String image) {
         this.quantity = quantity;
         this.name = name;
         this.reference = reference;
@@ -87,11 +87,11 @@ public class Product {
         this.description = description;
     }
 
-    public float getPrice() {
+    public int getPrice() {
         return price;
     }
 
-    public void setPrice(float price) {
+    public void setPrice(int price) {
         this.price = price;
     }
 

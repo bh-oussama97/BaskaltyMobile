@@ -24,20 +24,20 @@ import java.util.Map;
  * @author benha
  */
 public class ProductService {
-    
+
     private ConnectionRequest request;
 
     private boolean responseResult;
     ArrayList<Product> products = new ArrayList<>();
 
     public ProductService() {
-         request = DataSource.getInstance().getRequest();
+        request = DataSource.getInstance().getRequest();
     }
-    
-     public boolean addProduct(Product p) {
-        String url = Statics.BASE_URL + "/products/add?name=" + p.getName() + "&price=" +p.getPrice() +
-                "&image="+p.getImage()+"&description="+p.getDescription()+"&reference="+p.getReference()
-                +"&quantite="+ p.getQuantity();
+
+    public boolean addProduct(Product p) {
+        String url = Statics.BASE_URL + "/products/add?name=" + p.getName() + "&price=" + p.getPrice()
+                + "&image=" + p.getImage() + "&description=" + p.getDescription() + "&reference=" + p.getReference()
+                + "&quantite=" + p.getQuantity();
 
         request.setUrl(url);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -51,22 +51,22 @@ public class ProductService {
 
         return responseResult;
     }
-     
-       public ArrayList<Product> parseProducts (String jsonText) {
+
+    public ArrayList<Product> parseProducts(String jsonText) {
         try {
-        
-            JSONParser jp = new JSONParser(); 
+
+            JSONParser jp = new JSONParser();
             Map<String, Object> tasksListJson = jp.parseJSON(new CharArrayReader(jsonText.toCharArray()));
             List<Map<String, Object>> list = (List<Map<String, Object>>) tasksListJson.get("root");
             for (Map<String, Object> obj : list) {
-                
-               int id = (int)Float.parseFloat(obj.get("id").toString());
-               String name = obj.get("name").toString();
-               int quantity = (int) Float.parseFloat(obj.get("quantite").toString());
-               String reference  = obj.get("reference").toString();
-               String description = obj.get("description").toString();
-               String image = obj.get("image").toString();
-               float price = Float.parseFloat(obj.get("price").toString());
+
+                int id = (int) Float.parseFloat(obj.get("id").toString());
+                String name = obj.get("name").toString();
+                int quantity = (int) Float.parseFloat(obj.get("quantite").toString());
+                String reference = obj.get("reference").toString();
+                String description = obj.get("description").toString();
+                String image = obj.get("image").toString();
+                int price = (int) Float.parseFloat(obj.get("price").toString());
                 products.add(new Product(id, quantity, name, reference, description, price, image));
             }
 
@@ -75,28 +75,26 @@ public class ProductService {
 
         return products;
     }
-       
-   public boolean SearchProduct(int id)
-   {
-       String url = Statics.BASE_URL + "/products/find/"+id;
+
+    public boolean SearchProduct(int id) {
+        String url = Statics.BASE_URL + "/products/find/" + id;
         request.setUrl(url);
         request.setPost(false);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
             @Override
             public void actionPerformed(NetworkEvent evt) {
-              responseResult = request.getResponseCode() == 200;
+                responseResult = request.getResponseCode() == 200;
                 request.removeResponseListener(this);
             }
         });
         NetworkManager.getInstance().addToQueueAndWait(request);
 
         return responseResult;
-       
-   }
-       
-       
-      public ArrayList<Product> searchProduct2(int id ) {
-        String url = Statics.BASE_URL + "/products/find/"+id;
+
+    }
+
+    public ArrayList<Product> searchProduct2(int id) {
+        String url = Statics.BASE_URL + "/products/find/" + id;
         request.setUrl(url);
         request.setPost(false);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -110,10 +108,8 @@ public class ProductService {
 
         return products;
     }
-       
-       
-       
-        public ArrayList<Product> getAllProducts() {
+
+    public ArrayList<Product> getAllProducts() {
         String url = Statics.BASE_URL + "/products/all";
         request.setUrl(url);
         request.setPost(false);
@@ -128,10 +124,8 @@ public class ProductService {
 
         return products;
     }
-    
-        
-        
-         public ArrayList<Product> parseProductDetails(String json) {
+
+    public ArrayList<Product> parseProductDetails(String json) {
 
         ArrayList<Product> listTasks = new ArrayList<>();
 
@@ -141,19 +135,19 @@ public class ProductService {
             List<Map<String, Object>> list = (List<Map<String, Object>>) articles.get("root");
 
             for (Map<String, Object> obj : list) {
-        
+
                 Product pro = new Product();
-                float id = Float.parseFloat(obj.get("id").toString());
+                int id = (int) Float.parseFloat(obj.get("id").toString());
                 pro.setId((int) id);
                 pro.setImage((String) obj.get("name"));
                 pro.setDescription((String) obj.get("description"));
                 pro.setReference((String) obj.get("reference"));
                 pro.setImage((String) obj.get("image"));
-                pro.setPrice(Float.parseFloat(obj.get("price").toString()));
+                pro.setPrice((int) Float.parseFloat(obj.get("price").toString()));
                 pro.setQuantity((int) Float.parseFloat(obj.get("quantite").toString()));
-           
+
                 System.out.println(pro.toString());
-            
+
                 listTasks.add(pro);
 
             }
@@ -163,14 +157,8 @@ public class ProductService {
         System.out.println(listTasks);
         return listTasks;
     }
-        
-        
-        
-        
-        
-        
-        
-      /*   public ArrayList<Product> SearchProduct (int id) {
+
+    /*   public ArrayList<Product> SearchProduct (int id) {
        //ArrayList<Product> pdetails = new ArrayList<>();
         String url = Statics.BASE_URL + "/products/find/"+id;
         request.setUrl(url);
@@ -185,9 +173,7 @@ public class ProductService {
         NetworkManager.getInstance().addToQueueAndWait(request);
         return products;
     }*/
-        
-        
-       /*  public ArrayList<Product> SearchProduct(int id)
+ /*  public ArrayList<Product> SearchProduct(int id)
         {
      
        String url = Statics.BASE_URL + "/products/find/"+id;
@@ -204,24 +190,22 @@ public class ProductService {
         
         return products;
     }*/
-        
-         
-           public void DeleteProduct (int id) {
+    public void DeleteProduct(int id) {
         ConnectionRequest con = new ConnectionRequest();
-        String url = Statics.BASE_URL + "/products/delete?"+id;
+        String url = Statics.BASE_URL + "/products/delete?" + id;
         con.setUrl(url);
-      con.addResponseListener((e) -> {
+        con.addResponseListener((e) -> {
             String str = new String(con.getResponseData());
             System.out.println(str);
 
         });
         NetworkManager.getInstance().addToQueueAndWait(con);
     }
-           
-              public boolean UpdateProduct (Product p) {
-        String url = Statics.BASE_URL + "/products/edit?id="+p.getId()+"&name=" + p.getName() + "&price=" +p.getPrice() +
-                "&image="+p.getImage()+"&description="+p.getDescription()+"&reference="+p.getReference()
-                +"&quantite="+ p.getQuantity();
+
+    public boolean UpdateProduct(Product p) {
+        String url = Statics.BASE_URL + "/products/edit?id=" + p.getId() + "&name=" + p.getName() + "&price=" + p.getPrice()
+                + "&image=" + p.getImage() + "&description=" + p.getDescription() + "&reference=" + p.getReference()
+                + "&quantite=" + p.getQuantity();
 
         request.setUrl(url);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -235,9 +219,5 @@ public class ProductService {
 
         return responseResult;
     }
-           
-         
-       
-    
-    
+
 }

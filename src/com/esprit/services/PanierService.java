@@ -63,7 +63,7 @@ public class PanierService {
                 
                int id = (int)Float.parseFloat(obj.get("id").toString());
                int quantity = (int) Float.parseFloat(obj.get("quantity").toString());
-               float price = Float.parseFloat(obj.get("prix").toString());
+               int price = (int) Float.parseFloat(obj.get("prix").toString());
                String name = obj.get("name").toString();
                String image = obj.get("image").toString();
               
@@ -119,21 +119,42 @@ public class PanierService {
   
     }
     
-        /*public void DeleteFromPanier(int id) {
-        //int iduser = 42;
-        //ConnectionRequest con = new ConnectionRequest();
-       String url = Statics.BASE_URL + "/panier/delete?id="+id;
-        request.setUrl(url);
-
-        System.out.println("delete");
-
-        request.addResponseListener(e -> {
-            String str = new String(request.getResponseData());
-            System.out.println(str);
-        });
-        NetworkManager.getInstance().addToQueueAndWait(request);
-    }*/
     
+    public void Order(int id_panier, int total_panier)
+    {
+        String url = Statics.BASE_URL +"/panier/order/" + total_panier +"?id="+ id_panier;
+        request.setUrl(url);
+        request.setPost(true);
+        
+          request.addResponseListener(new ActionListener<NetworkEvent>() {
+
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+               responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+                request.removeResponseListener(this);
+            }
+        });
+            
+      NetworkManager.getInstance().addToQueueAndWait(request);     
+    }
+    
+     public void OrderAll (int total_panier)
+    {
+        String url = Statics.BASE_URL +"/panier/orderall/" + total_panier ;
+        request.setUrl(url);
+        request.setPost(false);
+        
+          request.addResponseListener(new ActionListener<NetworkEvent>() {
+
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+               responseResult = request.getResponseCode() == 200; // Code HTTP 200 OK
+                request.removeResponseListener(this);
+            }
+        });
+            
+      NetworkManager.getInstance().addToQueueAndWait(request);     
+    }
     
     
     

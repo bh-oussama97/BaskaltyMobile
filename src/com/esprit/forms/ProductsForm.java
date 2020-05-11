@@ -59,7 +59,7 @@ public class ProductsForm extends Form {
        instance = this;
    }
 
-    public ProductsForm(Form previous, Resources theme) {
+    public ProductsForm( Resources theme) {
         current = this;
         setTitle("All Products");
 
@@ -68,7 +68,19 @@ public class ProductsForm extends Form {
             add(AddItems(p, theme));
         }
 
-        getToolbar().addMaterialCommandToLeftBar("", FontImage.MATERIAL_ARROW_BACK, e -> previous.showBack());
+        getToolbar().addMaterialCommandToLeftSideMenu("",FontImage.MATERIAL_MENU,new ActionListener() {
+
+                @Override
+                public void actionPerformed(ActionEvent evt) {
+                    
+                }
+            });
+        
+        getToolbar().addMaterialCommandToLeftSideMenu("Add product",FontImage.MATERIAL_ADD_CIRCLE, ev-> new AddProduct(theme).show());
+        
+        getToolbar().addMaterialCommandToLeftSideMenu("Products",FontImage.MATERIAL_STORE, ev-> new ProductsForm(theme).show());
+      
+        getToolbar().addMaterialCommandToLeftSideMenu("Panier",FontImage.MATERIAL_SHOPPING_CART, ev-> new PanierForm(theme).show());
     }
 
     public Container AddItems(Product pro, Resources theme) {
@@ -118,7 +130,7 @@ public class ProductsForm extends Form {
         Label lprix = new Label("Price :");
         Font fnt4 = Font.createSystemFont(Font.FACE_SYSTEM, Font.STYLE_BOLD, Font.SIZE_SMALL);
         lprix.getUnselectedStyle().setFont(fnt4);
-        Label tfprix = new Label(Float.toString(pro.getPrice()) + "DT");
+        Label tfprix = new Label(Integer.toString(pro.getPrice()) + "DT");
 
         Container prix = new Container(BoxLayout.x());
         prix.add(lprix);
@@ -158,7 +170,7 @@ public class ProductsForm extends Form {
                 if (ps.AddToPanier(pro.getId(),sliderquatity.getProgress()))
                 {
                     Dialog.show("Sucess", "Product Added !", "OK",null);
-                    new PanierForm(current, theme).show();
+                    new PanierForm(theme).show();
                 }
                 else
                 {
