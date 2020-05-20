@@ -5,13 +5,19 @@
  */
 package com.esprit.services;
 
+import com.codename1.components.ToastBar;
 import com.codename1.io.CharArrayReader;
 import com.codename1.io.ConnectionRequest;
 import com.codename1.io.JSONParser;
 import com.codename1.io.NetworkEvent;
 import com.codename1.io.NetworkManager;
+import com.codename1.ui.Dialog;
+import com.codename1.ui.FontImage;
 import com.codename1.ui.events.ActionListener;
+import com.codename1.ui.util.Resources;
+import com.codename1.uikit.cleanmodern.AfficherMesProduitsForm;
 import com.esprit.entities.Product;
+import com.esprit.entities.User;
 import com.esprit.utils.DataSource;
 import com.esprit.utils.Statics;
 import java.io.IOException;
@@ -37,7 +43,7 @@ public class ProductService {
     public boolean addProduct(Product p) {
         String url = Statics.BASE_URL + "/products/add?name=" + p.getName() + "&price=" + p.getPrice()
                 + "&image=" + p.getImage() + "&description=" + p.getDescription() + "&reference=" + p.getReference()
-                + "&quantite=" + p.getQuantity();
+                + "&quantite=" + p.getQuantity()+"&iduser="+User.connectedUser.getId();
 
         request.setUrl(url);
         request.addResponseListener(new ActionListener<NetworkEvent>() {
@@ -93,7 +99,8 @@ public class ProductService {
 
     }
 
-    public ArrayList<Product> searchProduct2(int id) {
+    public ArrayList<Product> searchProduct2(int id) 
+    {
         String url = Statics.BASE_URL + "/products/find/" + id;
         request.setUrl(url);
         request.setPost(false);
@@ -108,6 +115,26 @@ public class ProductService {
 
         return products;
     }
+    
+     public ArrayList<Product> getProductsById(int id_user) {
+        String url = Statics.BASE_URL + "/products/getByUser/"+id_user;
+        request.setUrl(url);
+        request.setPost(false);
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                products = parseProducts(new String(request.getResponseData()));
+                request.removeResponseListener(this);
+            }
+        });
+        NetworkManager.getInstance().addToQueueAndWait(request);
+
+        return products;
+    }
+    
+    
+    
+    
 
     public ArrayList<Product> getAllProducts() {
         String url = Statics.BASE_URL + "/products/all";
@@ -190,22 +217,36 @@ public class ProductService {
         
         return products;
     }*/
-    public void DeleteProduct(int id) {
-        ConnectionRequest con = new ConnectionRequest();
-        String url = Statics.BASE_URL + "/products/delete?" + id;
-        con.setUrl(url);
-        con.addResponseListener((e) -> {
-            String str = new String(con.getResponseData());
-            System.out.println(str);
+    public void DeleteProduct (int id) {
 
+        String url = Statics.BASE_URL + "/products/delete?id="+id;
+        request.setUrl(url);
+        request.setPost(true);
+        
+        request.addResponseListener(new ActionListener<NetworkEvent>() {
+
+            @Override
+            public void actionPerformed(NetworkEvent evt) {
+                if (responseResult = request.getResponseCode() == 200)
+                {
+                     request.removeResponseListener(this);
+                     ToastBar.showMessage("Product deleted Successfully !",FontImage.MATERIAL_DONE, 5);
+                
+                }
+                else 
+                {
+                     ToastBar.showMessage("Error,Try again !",FontImage.MATERIAL_ERROR, 5);
+                }
+            }
         });
-        NetworkManager.getInstance().addToQueueAndWait(con);
+        NetworkManager.getInstance().addToQueueAndWait(request);
+  
     }
 
-    public boolean UpdateProduct(Product p) {
-        String url = Statics.BASE_URL + "/products/edit?id=" + p.getId() + "&name=" + p.getName() + "&price=" + p.getPrice()
-                + "&image=" + p.getImage() + "&description=" + p.getDescription() + "&reference=" + p.getReference()
-                + "&quantite=" + p.getQuantity();
+    public boolean UpdateProduct(int id,String name,int price,String description,String reference,int quantity) {
+        String url = Statics.BASE_URL + "/products/edit?id=" + id + "&name=" + name + "&price=" + price
+                + "&description=" + description + "&reference=" + reference
+                + "&quantite=" + quantity;
 
         request.setUrl(url);
         request.addResponseListener(new ActionListener<NetworkEvent>() {

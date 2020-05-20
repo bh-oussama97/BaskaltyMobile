@@ -25,6 +25,18 @@ public class Product {
     public Product() {
     }
 
+    public Product(int id, int quantity, String name, String reference, String description, int price) {
+        this.id = id;
+        this.quantity = quantity;
+        this.name = name;
+        this.reference = reference;
+        this.description = description;
+        this.price = price;
+    }
+    
+    
+    
+
     public Product(int id, int quantity, String name, String reference, String description, int price, String image) {
         this.id = id;
         this.quantity = quantity;

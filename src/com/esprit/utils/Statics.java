@@ -11,5 +11,9 @@ package com.esprit.utils;
  */
 public class Statics {
 
-    public static final String BASE_URL = "http://localhost/pi-dev-final/web/app_dev.php/api";
+    public static final String BASE_URL = "http://localhost/Pi-dev-final/web/app_dev.php/api";
+     public static final String BASE_URL3 = "http://localhost/Pi-dev-final/web/app_dev.php/Post";
+        public static final String BASE_URL1 = "http://localhost/Pi-dev-final/web/app_dev.php/Maintenance";
+        public static final String BASE_URL2 = "http://localhost/Pi-dev-final/web/app_dev.php/Events";
+
 }
